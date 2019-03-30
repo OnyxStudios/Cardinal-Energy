@@ -1,0 +1,91 @@
+plugins {
+	id 'fabric-loom' version '0.2.0-SNAPSHOT'
+	id 'maven-publish'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = "com.github.NerdHubMC"
+archivesBaseName = "Cardinal-Energy"
+version = "${mod_version}"
+
+minecraft {
+}
+
+repositories {
+	jcenter()
+	maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${mc_version}"
+	mappings "net.fabricmc:yarn:${yarn_mappings}"
+	modCompile "net.fabricmc:fabric-loader:${loader_version}"
+	modCompile "net.fabricmc:fabric:${fabric_version}"
+	}
+
+jar {
+	from "LICENSE.md"
+	manifest.mainAttributes(
+			"Implementation-Title": project.name,
+			"Implementation-Version": project.version,
+			"Maven-Artifact": "${project.group}:${project.archivesBaseName}:${project.version}".toLowerCase(Locale.ROOT),
+			"Built-On-Minecraft": "${mc_version}",
+			"Built-On-Java": "${System.getProperty("java.vm.version")} (${System.getProperty("java.vm.vendor")})"
+	)
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	from sourceSets.main.allSource
+	classifier = 'sources'
+}
+
+artifacts {
+	archives sourcesJar
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifact jar
+			artifact sourcesJar
+			pom {
+				name = "Cardinal-Energy"
+				url = "https://github.com/NerdHubMC/Cardinal-Energy"
+				licenses {
+					license {
+						name = "MIT License"
+						url = "https://github.com/NerdHubMC/Cardinal-Energy/blob/master/LICENSE.md"
+					}
+				}
+				scm {
+					url = "https://github.com/NerdHubMC/Cardinal-Energy"
+					connection = "scm:git:git://github.com/NerdHubMC/Cardinal-Energy.git"
+					developerConnection = "scm:git:git@github.com:NerdHubMC/Cardinal-Energy.git"
+				}
+				issueManagement {
+					system = "github"
+					url = "https://github.com/NerdHubMC/Cardinal-Energy/issues"
+				}
+			}
+		}
+	}
+
+	repositories {
+		if (project.hasProperty("maven_user") && project.hasProperty("maven_pass")) {
+			maven {
+				name = "Abused's Maven"
+				url = findProperty("maven_url")
+				credentials {
+					username = findProperty("maven_user")
+					password = findProperty("maven_pass")
+				}
+				authentication {
+					basic(BasicAuthentication)
+				}
+			}
+		}
+	}
+}
+tasks.publish.dependsOn build

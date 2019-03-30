@@ -1,0 +1,7 @@
+{
+  "id": "cardinalenergy",
+  "name": "Cardinal Energy",
+  "description": "An Energy API for Fabric",
+  "version": "1.0.0",
+  "side": "universal"
+}
