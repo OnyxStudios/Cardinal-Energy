@@ -1,5 +1,6 @@
 package nerdhub.cardinalenergy.impl.example;
 
+import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.api.IEnergyProvider;
 import nerdhub.cardinalenergy.api.IEnergyReceiver;
 import nerdhub.cardinalenergy.impl.EnergyStorage;
@@ -12,8 +13,9 @@ import net.minecraft.util.math.Direction;
 /**
  * An example impl of {@link IEnergyReceiver}, {@link IEnergyProvider} and {@link EnergyStorage}
  */
-public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyReceiver, IEnergyProvider {
+public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyHandler {
 
+    //Create an EnergyStorage instance that stores 10,000 energy
     public EnergyStorage storage = new EnergyStorage(10000);
 
     public BlockEntityEnergyImpl(BlockEntityType<?> blockEntityType_1) {
@@ -23,6 +25,7 @@ public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyReceive
     @Override
     public CompoundTag toTag(CompoundTag tag) {
         super.toTag(tag);
+        //Write energy to nbt
         this.storage.writeEnergyToTag(tag);
         return tag;
     }
@@ -30,22 +33,13 @@ public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyReceive
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
+        //Read energy from nbt
         this.storage.readEnergyFromTag(tag);
     }
 
     @Override
-    public boolean sendEnergy(BlockPos pos, int amount) {
-        return this.storage.sendEnergy(world, pos, amount);
-    }
-
-    @Override
-    public int receiveEnergy(Direction direction, int amount) {
-        //Can also check for a specific direction here
-        return this.storage.receiveEnergy(amount);
-    }
-
-    @Override
-    public EnergyStorage getEnergyStorage() {
+    public EnergyStorage getEnergyStorage(Direction direction) {
+        //Return the direction regardless of the direction
         return this.storage;
     }
 }

@@ -27,8 +27,8 @@ public class EnergyStorage implements IEnergyStorage {
     }
 
     @Override
-    public int receiveEnergy(int recieve) {
-        this.energyStored += recieve;
+    public int receiveEnergy(int receive) {
+        this.energyStored += receive;
 
         if (energyStored > capacity) {
             int extra = energyStored - capacity;
@@ -36,33 +36,32 @@ public class EnergyStorage implements IEnergyStorage {
             return extra;
         }
 
-        return recieve;
+        return receive;
     }
 
     @Override
-    public boolean sendEnergy(World world, BlockPos pos, int amount) {
+    public int sendEnergy(World world, BlockPos pos, int amount) {
         if(amount <= energyStored) {
             if(world.getBlockEntity(pos) instanceof IEnergyReceiver) {
                 int amountReceived = getEnergyReceiver(world, pos).receiveEnergy(null, amount);
                 this.extractEnergy(amountReceived);
-                return true;
+                return amountReceived;
             }
         }
 
-        return false;
-    }
-
-    public IEnergyReceiver getEnergyReceiver(World world, BlockPos pos) {
-        return (IEnergyReceiver) world.getBlockEntity(pos);
+        return 0;
     }
 
     @Override
-    public void extractEnergy(int amount) {
-        this.energyStored -= amount;
+    public int extractEnergy(int amount) {
+        int extracted = amount;
 
-        if(amount > energyStored) {
-            this.energyStored = 0;
+        if(extracted > energyStored) {
+            extracted = energyStored;
         }
+
+        this.energyStored -= extracted;
+        return extracted;
     }
 
     @Override
@@ -86,6 +85,16 @@ public class EnergyStorage implements IEnergyStorage {
     }
 
     @Override
+    public boolean canReceive(int amount) {
+        return energyStored + amount <= capacity;
+    }
+
+    @Override
+    public boolean canExtract(int amount) {
+        return amount <= energyStored;
+    }
+
+    @Override
     public CompoundTag writeEnergyToTag(CompoundTag nbt) {
         nbt.putInt("capacity", capacity);
         nbt.putInt("energyStored", energyStored);
@@ -97,5 +106,9 @@ public class EnergyStorage implements IEnergyStorage {
         capacity = nbt.getInt("capacity");
         energyStored = nbt.getInt("energyStored");
         return this;
+    }
+
+    public IEnergyReceiver getEnergyReceiver(World world, BlockPos pos) {
+        return (IEnergyReceiver) world.getBlockEntity(pos);
     }
 }
