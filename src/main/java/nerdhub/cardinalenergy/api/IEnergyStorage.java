@@ -13,13 +13,13 @@ public interface IEnergyStorage {
     /**
      * Receive energy internally
      *
-     * @param receive - The amount of energy to fill
+     * @param amount - The amount of energy to fill
      * @return - Returns the amount of energy received
      */
-    int receiveEnergy(int receive);
+    int receiveEnergy(int amount);
 
     /**
-     * Send energy to a {@link IEnergyReceiver} at a given BlockPos
+     * Send energy to a {@link IEnergyHandler} at a given BlockPos
      *
      * @param world  - The world used to get the BlockEntity
      * @param pos    - The position of the IEnergyReceiver

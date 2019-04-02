@@ -1,17 +1,14 @@
 package nerdhub.cardinalenergy.impl.example;
 
 import nerdhub.cardinalenergy.api.IEnergyHandler;
-import nerdhub.cardinalenergy.api.IEnergyProvider;
-import nerdhub.cardinalenergy.api.IEnergyReceiver;
 import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 /**
- * An example impl of {@link IEnergyReceiver}, {@link IEnergyProvider} and {@link EnergyStorage}
+ * An example impl of {@link EnergyStorage}
  */
 public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyHandler {
 

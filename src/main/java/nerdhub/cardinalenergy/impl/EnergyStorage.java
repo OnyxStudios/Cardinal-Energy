@@ -1,8 +1,9 @@
 package nerdhub.cardinalenergy.impl;
 
-import nerdhub.cardinalenergy.api.IEnergyReceiver;
+import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
 import nerdhub.cardinalenergy.impl.example.BlockEntityEnergyImpl;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,23 +28,22 @@ public class EnergyStorage implements IEnergyStorage {
     }
 
     @Override
-    public int receiveEnergy(int receive) {
-        this.energyStored += receive;
+    public int receiveEnergy(int amount) {
+        int received = amount;
 
-        if (energyStored > capacity) {
-            int extra = energyStored - capacity;
-            this.energyStored = capacity;
-            return extra;
+        if (received + energyStored > capacity) {
+            received = amount - ((amount + energyStored) - capacity);
         }
 
-        return receive;
+        this.energyStored += received;
+        return received;
     }
 
     @Override
     public int sendEnergy(World world, BlockPos pos, int amount) {
         if(amount <= energyStored) {
-            if(world.getBlockEntity(pos) instanceof IEnergyReceiver) {
-                int amountReceived = getEnergyReceiver(world, pos).receiveEnergy(null, amount);
+            if(world.getBlockEntity(pos) instanceof IEnergyHandler) {
+                int amountReceived = getEnergyReceiver(world, pos).getEnergyStorage(null).receiveEnergy(amount);
                 this.extractEnergy(amountReceived);
                 return amountReceived;
             }
@@ -108,7 +108,8 @@ public class EnergyStorage implements IEnergyStorage {
         return this;
     }
 
-    public IEnergyReceiver getEnergyReceiver(World world, BlockPos pos) {
-        return (IEnergyReceiver) world.getBlockEntity(pos);
+    public IEnergyHandler getEnergyReceiver(World world, BlockPos pos) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        return blockEntity instanceof IEnergyHandler && ((IEnergyHandler) blockEntity).canConnectEnergy(null) ? (IEnergyHandler) blockEntity : null;
     }
 }

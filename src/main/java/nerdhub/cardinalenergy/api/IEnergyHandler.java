@@ -5,13 +5,11 @@ import net.minecraft.util.math.Direction;
 
 /**
  * Implemented on a energy handler object to specify that it handles energy
- *
- * Note, this is not needed if implementing {@link IEnergyProvider} or {@link IEnergyReceiver}
  */
 public interface IEnergyHandler {
 
     /**
-     * Is used to define weather or not cables and energy connections can connect at a given side
+     * Is used to define weather or not cables and energy connections can connect at a given side and provide energy
      * Defaults to true unless overridden
      * @param direction - The direction to attempt connection, could be null
      * @return - True if a connection is successful
