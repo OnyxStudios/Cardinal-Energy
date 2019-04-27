@@ -42,7 +42,7 @@ public class EnergyStorage implements IEnergyStorage {
     @Override
     public int sendEnergy(World world, BlockPos pos, int amount) {
         if(amount <= energyStored) {
-            if(world.getBlockEntity(pos) instanceof IEnergyHandler) {
+            if(world.getBlockEntity(pos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(pos)).isEnergyReceiver(null)) {
                 int amountReceived = getEnergyReceiver(world, pos).getEnergyStorage(null).receiveEnergy(amount);
                 this.extractEnergy(amountReceived);
                 return amountReceived;
