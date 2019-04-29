@@ -1,7 +1,21 @@
 {
+  "schemaVersion": 1,
   "id": "cardinalenergy",
+  "version": "1.0.0",
   "name": "Cardinal Energy",
   "description": "An Energy API for Fabric",
-  "version": "1.0.0",
-  "side": "universal"
+  "authors": [
+    "abused_master"
+  ],
+  "contact": {
+    "homepage": "https://minecraft.curseforge.com/projects/Cardinal-Energy",
+    "sources": "https://github.com/NerdHubMC/Cardinal-Energy"
+  },
+  "license": "MIT",
+  "icon": "assets/cardinalenergy/icon.png",
+  "environment": "*",
+  "requires": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
 }
