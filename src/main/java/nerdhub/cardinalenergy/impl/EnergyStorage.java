@@ -1,5 +1,7 @@
 package nerdhub.cardinalenergy.impl;
 
+import nerdhub.cardinalenergy.DefaultTypes;
+import nerdhub.cardinalenergy.api.EnergyType;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
 import nerdhub.cardinalenergy.impl.example.BlockEntityEnergyImpl;
@@ -13,10 +15,14 @@ import net.minecraft.world.World;
  *
  * An example implementation of this can be found at {@link BlockEntityEnergyImpl}
  */
-public class EnergyStorage implements IEnergyStorage {
+public class EnergyStorage extends EnergyType implements IEnergyStorage {
 
     private int capacity;
     private int energyStored;
+
+    public EnergyStorage() {
+        this(0, 0);
+    }
 
     public EnergyStorage(int capacity) {
         this(capacity, 0);
@@ -42,8 +48,8 @@ public class EnergyStorage implements IEnergyStorage {
     @Override
     public int sendEnergy(World world, BlockPos pos, int amount) {
         if(amount <= energyStored) {
-            if(world.getBlockEntity(pos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(pos)).isEnergyReceiver(null)) {
-                int amountReceived = getEnergyReceiver(world, pos).getEnergyStorage(null).receiveEnergy(amount);
+            if(world.getBlockEntity(pos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(pos)).isEnergyReceiver(null, DefaultTypes.CARDINAL_ENERGY)) {
+                int amountReceived = ((EnergyStorage) getEnergyReceiver(world, pos).getEnergyStorage(null)).receiveEnergy(amount);
                 this.extractEnergy(amountReceived);
                 return amountReceived;
             }
@@ -110,6 +116,6 @@ public class EnergyStorage implements IEnergyStorage {
 
     public IEnergyHandler getEnergyReceiver(World world, BlockPos pos) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity instanceof IEnergyHandler && ((IEnergyHandler) blockEntity).canConnectEnergy(null) ? (IEnergyHandler) blockEntity : null;
+        return blockEntity instanceof IEnergyHandler && ((IEnergyHandler) blockEntity).canConnectEnergy(null, DefaultTypes.CARDINAL_ENERGY) ? (IEnergyHandler) blockEntity : null;
     }
 }

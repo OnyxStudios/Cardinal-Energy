@@ -1,5 +1,6 @@
 package nerdhub.cardinalenergy.impl.example;
 
+import nerdhub.cardinalenergy.api.EnergyType;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.block.entity.BlockEntity;
@@ -8,7 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.Direction;
 
 /**
- * An example impl of {@link EnergyStorage}
+ * An example impl of {@link IEnergyHandler}
  */
 public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyHandler {
 
@@ -35,7 +36,7 @@ public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyHandler
     }
 
     @Override
-    public EnergyStorage getEnergyStorage(Direction direction) {
+    public EnergyType getEnergyStorage(Direction direction) {
         //Return the direction regardless of the direction
         return this.storage;
     }
