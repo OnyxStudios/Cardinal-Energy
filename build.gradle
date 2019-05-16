@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.1-SNAPSHOT'
+	id 'fabric-loom' version '0.2.2-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -16,6 +16,7 @@ minecraft {
 repositories {
 	jcenter()
 	maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
+	maven { url = "https://maven.abusedmaster.xyz" }
 }
 
 dependencies {
@@ -23,7 +24,10 @@ dependencies {
 	mappings "net.fabricmc:yarn:${yarn_mappings}"
 	modCompile "net.fabricmc:fabric-loader:${loader_version}"
 	modCompile "net.fabricmc:fabric:${fabric_version}"
-	}
+
+	modCompile "com.github.NerdHubMC:Cardinal-Components-API:${cardinal_components}"
+	include "com.github.NerdHubMC:Cardinal-Components-API:${cardinal_components}"
+}
 
 jar {
 	from "LICENSE.md"
