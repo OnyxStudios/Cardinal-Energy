@@ -1,5 +1,6 @@
 package nerdhub.cardinalenergy.api;
 
+import nerdhub.cardinal.components.api.component.Component;
 import nerdhub.cardinalenergy.impl.EnergyStorage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
@@ -8,7 +9,7 @@ import net.minecraft.world.World;
 /**
  * An interface used internally in an {@link EnergyStorage}
  */
-public interface IEnergyStorage {
+public interface IEnergyStorage extends Component {
 
     /**
      * Receive energy internally
@@ -19,50 +20,12 @@ public interface IEnergyStorage {
     int receiveEnergy(int amount);
 
     /**
-     * Send energy to a {@link IEnergyHandler} at a given BlockPos
-     *
-     * @param world  - The world used to get the BlockEntity
-     * @param pos    - The position of the IEnergyReceiver
-     * @param amount - The amount of energy to send
-     * @return - Returns the amount of energy sent
-     */
-    int sendEnergy(World world, BlockPos pos, int amount);
-
-    /**
      * Extract energy internally
      *
      * @param amount - The amount of energy to extract
      * @return - The amount of energy extracted
      */
     int extractEnergy(int amount);
-
-    /**
-     * Get the total amount of energy stored
-     *
-     * @return - The amount of energy stored
-     */
-    int getEnergyStored();
-
-    /**
-     * Get the max capacity of energy that can be stored
-     *
-     * @return - The energy capacity
-     */
-    int getEnergyCapacity();
-
-    /**
-     * Set the capacity of energy that can be stored
-     *
-     * @param maxCapacity - The new capacity to replace with
-     */
-    void setEnergyCapacity(int maxCapacity);
-
-    /**
-     * Set the amount of energy stored
-     *
-     * @param energy - The amount of energy to set
-     */
-    void setEnergyStored(int energy);
 
     /**
      * Check if the EnergyStorage can receive a set amount of energy
@@ -79,6 +42,44 @@ public interface IEnergyStorage {
     boolean canExtract(int amount);
 
     /**
+     * Set the amount of energy stored
+     *
+     * @param amount - The amount of energy to set
+     */
+    void setEnergyStored(int amount);
+
+    /**
+     * Set the capacity of energy that can be stored
+     *
+     * @param amount - The new capacity to replace with
+     */
+    void setCapacity(int amount);
+
+    /**
+     * Get the total amount of energy stored
+     *
+     * @return - The amount of energy stored
+     */
+    int getEnergyStored();
+
+    /**
+     * Get the max capacity of energy that can be stored
+     *
+     * @return - The energy capacity
+     */
+    int getCapacity();
+
+    /**
+     * Send energy to a {@link IEnergyHandler} at a given BlockPos
+     *
+     * @param world  - The world used to get the BlockEntity
+     * @param pos    - The position of the IEnergyReceiver
+     * @param amount - The amount of energy to send
+     * @return - Returns the amount of energy sent
+     */
+    int sendEnergy(World world, BlockPos pos, int amount);
+
+    /**
      * Write the energy data to a CompoundTag
      *
      * @param tag - The tag to write the energy data to
@@ -90,7 +91,6 @@ public interface IEnergyStorage {
      * Read energy data from a CompoundTag
      *
      * @param tag - The tag to read from
-     * @return - Returns an EnergyStorage with the read data
      */
-    EnergyStorage readEnergyFromTag(CompoundTag tag);
+    void readEnergyFromTag(CompoundTag tag);
 }

@@ -1,11 +1,10 @@
 package nerdhub.cardinalenergy.impl;
 
+import nerdhub.cardinal.components.api.BlockComponentProvider;
 import nerdhub.cardinalenergy.DefaultTypes;
-import nerdhub.cardinalenergy.api.EnergyType;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
 import nerdhub.cardinalenergy.impl.example.BlockEntityEnergyImpl;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
  *
  * An example implementation of this can be found at {@link BlockEntityEnergyImpl}
  */
-public class EnergyStorage extends EnergyType implements IEnergyStorage {
+public class EnergyStorage implements IEnergyStorage {
 
     private int capacity;
     private int energyStored;
@@ -48,8 +47,9 @@ public class EnergyStorage extends EnergyType implements IEnergyStorage {
     @Override
     public int sendEnergy(World world, BlockPos pos, int amount) {
         if(amount <= energyStored) {
-            if(world.getBlockEntity(pos) instanceof IEnergyHandler && ((IEnergyHandler) world.getBlockEntity(pos)).isEnergyReceiver(null, DefaultTypes.CARDINAL_ENERGY)) {
-                int amountReceived = ((EnergyStorage) getEnergyReceiver(world, pos).getEnergyStorage(null)).receiveEnergy(amount);
+
+            if(isEnergyReceiver(world, pos)) {
+                int amountReceived = getEnergyReceiver(world, pos).receiveEnergy(amount);
                 this.extractEnergy(amountReceived);
                 return amountReceived;
             }
@@ -76,12 +76,12 @@ public class EnergyStorage extends EnergyType implements IEnergyStorage {
     }
 
     @Override
-    public int getEnergyCapacity() {
+    public int getCapacity() {
         return this.capacity;
     }
 
     @Override
-    public void setEnergyCapacity(int maxCapacity) {
+    public void setCapacity(int maxCapacity) {
         this.capacity = maxCapacity;
     }
 
@@ -108,14 +108,29 @@ public class EnergyStorage extends EnergyType implements IEnergyStorage {
     }
 
     @Override
-    public EnergyStorage readEnergyFromTag(CompoundTag nbt) {
+    public void readEnergyFromTag(CompoundTag nbt) {
         capacity = nbt.getInt("capacity");
         energyStored = nbt.getInt("energyStored");
-        return this;
     }
 
-    public IEnergyHandler getEnergyReceiver(World world, BlockPos pos) {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity instanceof IEnergyHandler && ((IEnergyHandler) blockEntity).canConnectEnergy(null, DefaultTypes.CARDINAL_ENERGY) ? (IEnergyHandler) blockEntity : null;
+    public IEnergyStorage getEnergyReceiver(World world, BlockPos pos) {
+        BlockComponentProvider componentProvider = (BlockComponentProvider) world.getBlockState(pos).getBlock();
+
+        if(world.getBlockEntity(pos) instanceof IEnergyHandler && componentProvider.hasComponent(world, pos, DefaultTypes.CARDINAL_ENERGY, null)) {
+            IEnergyHandler energyHandler = (IEnergyHandler) world.getBlockEntity(pos);
+            return energyHandler.canConnectEnergy(null, DefaultTypes.CARDINAL_ENERGY) ? componentProvider.getComponent(world, pos, DefaultTypes.CARDINAL_ENERGY, null) : null;
+        }
+
+        return null;
+    }
+
+    public boolean isEnergyReceiver(World world, BlockPos pos) {
+        BlockComponentProvider componentProvider = (BlockComponentProvider) world.getBlockState(pos).getBlock();
+
+        if(world.getBlockEntity(pos) instanceof IEnergyHandler && componentProvider.hasComponent(world, pos, DefaultTypes.CARDINAL_ENERGY, null)) {
+            return ((IEnergyHandler) world.getBlockEntity(pos)).isEnergyReceiver(null, DefaultTypes.CARDINAL_ENERGY);
+        }
+
+        return false;
     }
 }

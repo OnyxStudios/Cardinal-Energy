@@ -1,8 +1,8 @@
 package nerdhub.cardinalenergy.impl;
 
+import nerdhub.cardinal.components.api.component.Component;
 import nerdhub.cardinalenergy.api.IEnergyItemStorage;
 import nerdhub.cardinalenergy.impl.example.ItemEnergyImpl;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 
 /**
@@ -15,81 +15,97 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
     public static final String ENERGY_TAG = "cardinal";
 
     private int capacity;
+    private int energyStored;
 
     public ItemEnergyStorage(int capacity) {
+        this(capacity, 0);
+    }
+
+    public ItemEnergyStorage(int capacity, int energyStored) {
         this.capacity = capacity;
+        this.energyStored = 0;
     }
 
     @Override
-    public int receiveEnergy(ItemStack stack, int amount) {
-        CompoundTag energyTag = getEnergyTag(stack);
-
-        int energyStored = energyTag.getInt("stored");
+    public int receiveEnergy(int amount) {
         int received = amount;
 
-        if(energyStored > capacity) {
-            received = capacity - energyStored;
+        if (received + energyStored > capacity) {
+            received = amount - ((amount + energyStored) - capacity);
         }
 
-        energyTag.putInt("stored", energyStored + amount);
-        stack.getTag().put(ENERGY_TAG, energyTag);
-
+        this.energyStored += received;
         return received;
     }
 
     @Override
-    public boolean extractEnergy(ItemStack stack, int amount) {
-        CompoundTag energyTag = getEnergyTag(stack);
+    public int extractEnergy(int amount) {
+        int extracted = amount;
 
-        int energyStored = energyTag.getInt("stored");
-
-        if(amount <= energyStored) {
-            energyTag.putInt("stored", energyStored - amount);
-            stack.getTag().put(ENERGY_TAG, energyTag);
-
-            return true;
+        if (extracted > energyStored) {
+            extracted = energyStored;
         }
 
-
-        return false;
+        this.energyStored -= extracted;
+        return extracted;
     }
 
     @Override
-    public void setEnergyStored(ItemStack stack, int amount) {
-        CompoundTag energyTag = getEnergyTag(stack);
-        energyTag.putInt("stored", amount > capacity ? capacity : amount);
-        stack.getTag().put(ENERGY_TAG, energyTag);
+    public int getEnergyStored() {
+        return energyStored;
     }
 
     @Override
-    public void setEnergyCapacity(ItemStack stack, int amount) {
-        CompoundTag energyTag = getEnergyTag(stack);
-        energyTag.putInt("capacity", amount);
-        stack.getTag().put(ENERGY_TAG, energyTag);
+    public int getCapacity() {
+        return this.capacity;
     }
 
     @Override
-    public int getEnergyStored(ItemStack stack) {
-        return getEnergyTag(stack).getInt("stored");
+    public void setCapacity(int maxCapacity) {
+        this.capacity = maxCapacity;
     }
 
     @Override
-    public int getEnergyCapacity(ItemStack stack) {
-        return getEnergyTag(stack).getInt("capacity") != capacity ? getEnergyTag(stack).getInt("capacity") : capacity;
+    public void setEnergyStored(int energy) {
+        this.energyStored = energy;
     }
 
-    private CompoundTag getEnergyTag(ItemStack stack) {
-        CompoundTag energyTag;
+    @Override
+    public boolean canReceive(int amount) {
+        return energyStored + amount <= capacity;
+    }
 
-        if(!stack.hasTag() || !stack.getTag().containsKey(ENERGY_TAG)) {
-            stack.setTag(new CompoundTag());
-            energyTag = new CompoundTag();
-            energyTag.putInt("capacity", this.capacity);
-            energyTag.putInt("stored", 0);
-        }else {
-            energyTag = stack.getTag().getCompound(ENERGY_TAG);
+    @Override
+    public boolean canExtract(int amount) {
+        return amount <= energyStored;
+    }
+
+    @Override
+    public void fromItemTag(CompoundTag tag) {
+        if(tag.containsKey(ENERGY_TAG)) {
+            CompoundTag energyData = tag.getCompound(ENERGY_TAG);
+            this.capacity = energyData.getInt("capacity");
+            this.energyStored = energyData.getInt("energyStored");
         }
+    }
 
-        return energyTag;
+    @Override
+    public CompoundTag toItemTag(CompoundTag tag) {
+        CompoundTag energyData = new CompoundTag();
+        energyData.putInt("capacity", capacity);
+        energyData.putInt("energyStored", energyStored);
+
+        tag.put(ENERGY_TAG, energyData);
+        return tag;
+    }
+
+    @Override
+    public Component newInstanceForItemStack() {
+        return new ItemEnergyStorage(capacity);
+    }
+
+    @Override
+    public boolean isComponentEqual(Component other) {
+        return other == this;
     }
 }

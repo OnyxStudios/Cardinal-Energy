@@ -1,15 +1,25 @@
 package nerdhub.cardinalenergy.api;
 
-import nerdhub.cardinalenergy.impl.ItemEnergyStorage;
+import nerdhub.cardinal.components.api.ComponentType;
+import net.minecraft.util.math.Direction;
 
 /**
  * Implemented on a energy handler item to specify that it handles energy
  */
-public interface IEnergyItemHandler {
+public interface IEnergyItemHandler<T> extends IEnergyHandler {
 
-    /**
-     * Get the ItemEnergyStorage
-     * @return - The ItemEnergyStorage used by the implementing class
-     */
-    ItemEnergyStorage getEnergyStorage();
+    @Override
+    default boolean canConnectEnergy(Direction direction, ComponentType type) {
+        throw new IllegalStateException("Tried to access IEnergyHandler methods from an IEnergyItemHandler");
+    }
+
+    @Override
+    default boolean isEnergyProvider(Direction direction, ComponentType type) {
+        throw new IllegalStateException("Tried to access IEnergyHandler methods from an IEnergyItemHandler");
+    }
+
+    @Override
+    default boolean isEnergyReceiver(Direction direction, ComponentType type) {
+        throw new IllegalStateException("Tried to access IEnergyHandler methods from an IEnergyItemHandler");
+    }
 }

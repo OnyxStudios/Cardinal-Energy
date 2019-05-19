@@ -2,14 +2,20 @@ package nerdhub.cardinalenergy;
 
 import nerdhub.cardinal.components.api.ComponentRegistry;
 import nerdhub.cardinal.components.api.ComponentType;
-import nerdhub.cardinalenergy.api.EnergyType;
-import nerdhub.cardinalenergy.api.IEnergyItemStorage;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
-import nerdhub.cardinalenergy.impl.EnergyStorage;
+import net.minecraft.util.Identifier;
 
+/**
+ * Default Cardinal Energy component type
+ * Can be used or a custom Energy Component can be created using a new ComponentType
+ */
 public class DefaultTypes {
 
-    public static final ComponentType<IEnergyStorage> CARDINAL_ENERGY_COMPONENT = ComponentRegistry.getOrCreate(IEnergyStorage.class);
-    public static final ComponentType<IEnergyItemStorage> CARDINAL_ENERGY_ITEM_COMPONENT = ComponentRegistry.getOrCreate(IEnergyItemStorage.class);
-    public static EnergyType CARDINAL_ENERGY = new EnergyStorage();
+    public static final String MODID = "cardinalenergy";
+
+    /**
+     * The default Cardinal Energy ComponentType
+     * To create your own energy type simply create a new ComponentType of IEnergyHandler
+     */
+    public static final ComponentType<IEnergyStorage> CARDINAL_ENERGY = ComponentRegistry.getOrCreate(IEnergyStorage.class, new Identifier(MODID, "cardinal_energy"));
 }
