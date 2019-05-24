@@ -101,7 +101,7 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
 
     @Override
     public Component newInstanceForItemStack() {
-        return new ItemEnergyStorage(capacity);
+        return new ItemEnergyStorage(capacity, energyStored);
     }
 
     @Override
