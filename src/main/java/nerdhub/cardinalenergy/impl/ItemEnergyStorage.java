@@ -1,7 +1,9 @@
 package nerdhub.cardinalenergy.impl;
 
 import nerdhub.cardinal.components.api.component.Component;
+import nerdhub.cardinalenergy.DefaultTypes;
 import nerdhub.cardinalenergy.api.IEnergyItemStorage;
+import nerdhub.cardinalenergy.api.IEnergyStorage;
 import nerdhub.cardinalenergy.impl.example.ItemEnergyImpl;
 import net.minecraft.nbt.CompoundTag;
 
@@ -106,6 +108,6 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
 
     @Override
     public boolean isComponentEqual(Component other) {
-        return other == this;
+        return other instanceof IEnergyStorage && ((IEnergyStorage) other).getEnergyStored() == energyStored && ((IEnergyStorage) other).getCapacity() == capacity;
     }
 }
