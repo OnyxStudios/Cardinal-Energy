@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.3-SNAPSHOT'
+	id 'fabric-loom' version '0.2.4-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -52,7 +52,9 @@ artifacts {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			artifact jar
+			afterEvaluate {
+				artifact remapJar.output
+			}
 			artifact sourcesJar
 			pom {
 				name = "Cardinal-Energy"
