@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cardinalenergy",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "name": "Cardinal Energy",
   "description": "An Energy API for Fabric",
   "authors": [

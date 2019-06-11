@@ -18,4 +18,9 @@ public class DefaultTypes {
      * To create your own energy type simply create a new ComponentType of IEnergyHandler
      */
     public static final ComponentType<IEnergyStorage> CARDINAL_ENERGY = ComponentRegistry.getOrCreate(IEnergyStorage.class, new Identifier(MODID, "cardinal_energy"));
+
+    /**
+     * The default Cardinal Energy mana ComponentType
+     */
+    public static final ComponentType<IEnergyStorage> MANA_COMPONENT = ComponentRegistry.getOrCreate(IEnergyStorage.class, new Identifier(MODID, "mana_type"));
 }

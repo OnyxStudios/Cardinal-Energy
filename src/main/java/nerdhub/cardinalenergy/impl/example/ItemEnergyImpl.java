@@ -38,7 +38,7 @@ public class ItemEnergyImpl extends Item implements IEnergyItemHandler, ItemComp
     }
 
     @Override
-    public void onEntityTick(ItemStack stack, World world, Entity entity, int int_1, boolean boolean_1) {
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int int_1, boolean boolean_1) {
         //Example adding energy every tick
         StackComponentAccessor stackComponentAccessor = (StackComponentAccessor) (Object) stack;
 

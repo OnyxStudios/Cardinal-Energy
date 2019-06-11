@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 public interface IEnergyItemStorage extends IEnergyStorage {
 
     @Override
-    void fromItemTag(CompoundTag tag);
+    void deserialize(CompoundTag tag);
 
     @Override
-    CompoundTag toItemTag(CompoundTag tag);
+    CompoundTag serialize(CompoundTag tag);
 
     @Override
-    Component newInstanceForItemStack();
+    Component newInstance();
 
     @Override
     boolean isComponentEqual(Component other);

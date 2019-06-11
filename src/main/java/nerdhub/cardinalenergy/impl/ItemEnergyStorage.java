@@ -1,7 +1,6 @@
 package nerdhub.cardinalenergy.impl;
 
 import nerdhub.cardinal.components.api.component.Component;
-import nerdhub.cardinalenergy.DefaultTypes;
 import nerdhub.cardinalenergy.api.IEnergyItemStorage;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
 import nerdhub.cardinalenergy.impl.example.ItemEnergyImpl;
@@ -83,7 +82,7 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
     }
 
     @Override
-    public void fromItemTag(CompoundTag tag) {
+    public void deserialize(CompoundTag tag) {
         if(tag.containsKey(ENERGY_TAG)) {
             CompoundTag energyData = tag.getCompound(ENERGY_TAG);
             this.capacity = energyData.getInt("capacity");
@@ -92,7 +91,7 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
     }
 
     @Override
-    public CompoundTag toItemTag(CompoundTag tag) {
+    public CompoundTag serialize(CompoundTag tag) {
         CompoundTag energyData = new CompoundTag();
         energyData.putInt("capacity", capacity);
         energyData.putInt("energyStored", energyStored);
@@ -102,7 +101,7 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
     }
 
     @Override
-    public Component newInstanceForItemStack() {
+    public Component newInstance() {
         return new ItemEnergyStorage(capacity, energyStored);
     }
 
