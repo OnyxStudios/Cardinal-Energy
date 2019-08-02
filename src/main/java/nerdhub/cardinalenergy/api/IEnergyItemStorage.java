@@ -13,29 +13,10 @@ import net.minecraft.world.World;
 public interface IEnergyItemStorage extends IEnergyStorage {
 
     @Override
-    void deserialize(CompoundTag tag);
-
-    @Override
-    CompoundTag serialize(CompoundTag tag);
-
-    @Override
-    Component newInstance();
-
-    @Override
     boolean isComponentEqual(Component other);
 
     @Override
     default int sendEnergy(World world, BlockPos pos, int amount) {
-        throw new IllegalStateException("Tried to access IEnergyStorage methods from an IEnergyItemStorage");
-    }
-
-    @Override
-    default CompoundTag writeEnergyToTag(CompoundTag tag) {
-        throw new IllegalStateException("Tried to access IEnergyStorage methods from an IEnergyItemStorage");
-    }
-
-    @Override
-    default void readEnergyFromTag(CompoundTag tag) {
         throw new IllegalStateException("Tried to access IEnergyStorage methods from an IEnergyItemStorage");
     }
 }

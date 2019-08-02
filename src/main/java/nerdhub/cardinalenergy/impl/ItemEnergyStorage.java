@@ -1,6 +1,7 @@
 package nerdhub.cardinalenergy.impl;
 
 import nerdhub.cardinal.components.api.component.Component;
+import nerdhub.cardinal.components.api.component.extension.CloneableComponent;
 import nerdhub.cardinalenergy.api.IEnergyItemStorage;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
 import nerdhub.cardinalenergy.impl.example.ItemEnergyImpl;
@@ -82,7 +83,7 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
     }
 
     @Override
-    public void deserialize(CompoundTag tag) {
+    public void fromTag(CompoundTag tag) {
         if(tag.containsKey(ENERGY_TAG)) {
             CompoundTag energyData = tag.getCompound(ENERGY_TAG);
             this.capacity = energyData.getInt("capacity");
@@ -91,7 +92,7 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
     }
 
     @Override
-    public CompoundTag serialize(CompoundTag tag) {
+    public CompoundTag toTag(CompoundTag tag) {
         CompoundTag energyData = new CompoundTag();
         energyData.putInt("capacity", capacity);
         energyData.putInt("energyStored", energyStored);
@@ -101,12 +102,12 @@ public class ItemEnergyStorage implements IEnergyItemStorage {
     }
 
     @Override
-    public Component newInstance() {
-        return new ItemEnergyStorage(capacity, energyStored);
+    public boolean isComponentEqual(Component other) {
+        return other instanceof IEnergyStorage && ((IEnergyStorage) other).getEnergyStored() == energyStored && ((IEnergyStorage) other).getCapacity() == capacity;
     }
 
     @Override
-    public boolean isComponentEqual(Component other) {
-        return other instanceof IEnergyStorage && ((IEnergyStorage) other).getEnergyStored() == energyStored && ((IEnergyStorage) other).getCapacity() == capacity;
+    public CloneableComponent newInstance() {
+        return new ItemEnergyStorage(capacity, energyStored);
     }
 }

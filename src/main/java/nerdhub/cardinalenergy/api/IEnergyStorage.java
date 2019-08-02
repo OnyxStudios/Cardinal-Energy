@@ -1,15 +1,14 @@
 package nerdhub.cardinalenergy.api;
 
-import nerdhub.cardinal.components.api.component.Component;
+import nerdhub.cardinal.components.api.component.extension.CloneableComponent;
 import nerdhub.cardinalenergy.impl.EnergyStorage;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
  * An interface used internally in an {@link EnergyStorage}
  */
-public interface IEnergyStorage extends Component {
+public interface IEnergyStorage extends CloneableComponent {
 
     /**
      * Receive energy internally
@@ -78,19 +77,4 @@ public interface IEnergyStorage extends Component {
      * @return - Returns the amount of energy sent
      */
     int sendEnergy(World world, BlockPos pos, int amount);
-
-    /**
-     * Write the energy data to a CompoundTag
-     *
-     * @param tag - The tag to write the energy data to
-     * @return - The CompoundTag with the energy data added
-     */
-    CompoundTag writeEnergyToTag(CompoundTag tag);
-
-    /**
-     * Read energy data from a CompoundTag
-     *
-     * @param tag - The tag to read from
-     */
-    void readEnergyFromTag(CompoundTag tag);
 }

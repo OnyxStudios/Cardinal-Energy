@@ -1,7 +1,7 @@
 package nerdhub.cardinalenergy.impl.example;
 
-import nerdhub.cardinal.components.api.BlockComponentProvider;
 import nerdhub.cardinal.components.api.ComponentType;
+import nerdhub.cardinal.components.api.component.BlockComponentProvider;
 import nerdhub.cardinal.components.api.component.Component;
 import nerdhub.cardinalenergy.DefaultTypes;
 import net.minecraft.block.BlockWithEntity;
@@ -47,7 +47,7 @@ public class BlockEnergyImpl extends BlockWithEntity implements BlockComponentPr
      * Get a list of all valid components this block supports
      */
     @Override
-    public Set<ComponentType<? extends Component>> getComponentTypes(BlockView blockView, BlockPos pos, Direction side) {
+    public Set<ComponentType<?>> getComponentTypes(BlockView blockView, BlockPos pos, Direction side) {
         return Collections.singleton(DefaultTypes.CARDINAL_ENERGY);
     }
 }

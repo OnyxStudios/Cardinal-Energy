@@ -16,6 +16,7 @@ minecraft {
 repositories {
 	jcenter()
 	maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
+	maven { url = "https://www.jitpack.io" }
 	maven { url = "https://maven.abusedmaster.xyz" }
 }
 

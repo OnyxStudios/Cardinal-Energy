@@ -1,6 +1,7 @@
 package nerdhub.cardinalenergy.impl;
 
-import nerdhub.cardinal.components.api.BlockComponentProvider;
+import nerdhub.cardinal.components.api.component.BlockComponentProvider;
+import nerdhub.cardinal.components.api.component.extension.CloneableComponent;
 import nerdhub.cardinalenergy.DefaultTypes;
 import nerdhub.cardinalenergy.api.IEnergyHandler;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
@@ -101,16 +102,21 @@ public class EnergyStorage implements IEnergyStorage {
     }
 
     @Override
-    public CompoundTag writeEnergyToTag(CompoundTag nbt) {
+    public CompoundTag toTag(CompoundTag nbt) {
         nbt.putInt("capacity", capacity);
         nbt.putInt("energyStored", energyStored);
         return nbt;
     }
 
     @Override
-    public void readEnergyFromTag(CompoundTag nbt) {
+    public void fromTag(CompoundTag nbt) {
         capacity = nbt.getInt("capacity");
         energyStored = nbt.getInt("energyStored");
+    }
+
+    @Override
+    public CloneableComponent newInstance() {
+        return new EnergyStorage(capacity, energyStored);
     }
 
     public IEnergyStorage getEnergyReceiver(World world, BlockPos pos) {

@@ -6,7 +6,7 @@ import net.minecraft.util.math.Direction;
 /**
  * Implemented on a energy handler item to specify that it handles energy
  */
-public interface IEnergyItemHandler<T> extends IEnergyHandler {
+public interface IEnergyItemHandler extends IEnergyHandler {
 
     @Override
     default boolean canConnectEnergy(Direction direction, ComponentType type) {

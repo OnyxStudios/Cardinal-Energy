@@ -11,19 +11,21 @@ import net.minecraft.nbt.CompoundTag;
  */
 public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyHandler {
 
-    //Create an EnergyStorage instance that stores 10,000 energy
-    //BlockComponentProvider is implemented on the Block to reference this
+    /**
+     * Create an EnergyStorage instance that stores 10,000 energy
+     * BlockComponentProvider is implemented on the Block to reference this
+     */
     public EnergyStorage storage = new EnergyStorage(10000);
 
-    public BlockEntityEnergyImpl(BlockEntityType<?> blockEntityType_1) {
-        super(blockEntityType_1);
+    public BlockEntityEnergyImpl(BlockEntityType<?> blockEntityType) {
+        super(blockEntityType);
     }
 
     @Override
     public CompoundTag toTag(CompoundTag tag) {
         super.toTag(tag);
         //Write energy to nbt
-        this.storage.writeEnergyToTag(tag);
+        this.storage.toTag(tag);
         return tag;
     }
 
@@ -31,6 +33,6 @@ public class BlockEntityEnergyImpl extends BlockEntity implements IEnergyHandler
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         //Read energy from nbt
-        this.storage.readEnergyFromTag(tag);
+        this.storage.fromTag(tag);
     }
 }

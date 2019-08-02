@@ -2,6 +2,7 @@ package nerdhub.cardinalenergy;
 
 import nerdhub.cardinal.components.api.ComponentRegistry;
 import nerdhub.cardinal.components.api.ComponentType;
+import nerdhub.cardinalenergy.api.IEnergyItemStorage;
 import nerdhub.cardinalenergy.api.IEnergyStorage;
 import net.minecraft.util.Identifier;
 
@@ -17,10 +18,10 @@ public class DefaultTypes {
      * The default Cardinal Energy ComponentType
      * To create your own energy type simply create a new ComponentType of IEnergyHandler
      */
-    public static final ComponentType<IEnergyStorage> CARDINAL_ENERGY = ComponentRegistry.getOrCreate(IEnergyStorage.class, new Identifier(MODID, "cardinal_energy"));
+    public static final ComponentType<IEnergyStorage> CARDINAL_ENERGY = ComponentRegistry.INSTANCE.registerIfAbsent(new Identifier(MODID, "cardinal_energy"), IEnergyStorage.class);
 
     /**
-     * The default Cardinal Energy mana ComponentType
+     * The default Cardinal Energy mana ComponentType, meant for entities
      */
-    public static final ComponentType<IEnergyStorage> MANA_COMPONENT = ComponentRegistry.getOrCreate(IEnergyStorage.class, new Identifier(MODID, "mana_type"));
+    public static final ComponentType<IEnergyItemStorage> MANA_COMPONENT = ComponentRegistry.INSTANCE.registerIfAbsent(new Identifier(MODID, "mana_type"), IEnergyItemStorage.class);
 }
